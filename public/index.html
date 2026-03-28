@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GENIE.exe</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect x='6' y='6' width='84' height='84' rx='18' transform='rotate(12 48 48)' fill='none' stroke='%23FF6B9D' stroke-width='3' opacity='.8'/%3E%3Crect x='20' y='20' width='56' height='56' rx='10' transform='rotate(-12 48 48)' fill='none' stroke='%23FF9F43' stroke-width='1.5' opacity='.45'/%3E%3Crect x='22' y='26' width='15' height='46' rx='4' fill='%23FF6B9D'/%3E%3Crect x='22' y='26' width='40' height='15' rx='4' fill='%23FF6B9D'/%3E%3Crect x='39' y='47' width='23' height='11' rx='3' fill='%23FF8C5A'/%3E%3Crect x='22' y='57' width='40' height='15' rx='4' fill='%23FF9F43'/%3E%3Ccircle cx='76' cy='20' r='5' fill='%23FF6B9D'/%3E%3Ccircle cx='86' cy='10' r='3' fill='%23FF9F43'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="cursor"></div>
+
+<!-- SHATTERED G LOGO — reusable symbol (no gradient refs inside symbol — use hardcoded hex) -->
+<svg style="display:none">
+  <symbol id="genie-mark" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer rotated square frame -->
+    <rect x="6" y="6" width="84" height="84" rx="18"
+      transform="rotate(12 48 48)"
+      fill="none" stroke="#FF6B9D" stroke-width="2.5" opacity=".8"/>
+    <!-- Inner counter-rotated square -->
+    <rect x="20" y="20" width="56" height="56" rx="10"
+      transform="rotate(-12 48 48)"
+      fill="none" stroke="#FF9F43" stroke-width="1.5" opacity=".45"/>
+    <!-- G: left vertical bar -->
+    <rect x="22" y="26" width="15" height="46" rx="4" fill="#FF6B9D"/>
+    <!-- G: top horizontal bar -->
+    <rect x="22" y="26" width="40" height="15" rx="4" fill="#FF6B9D"/>
+    <!-- G: middle crossbar — slightly different tone -->
+    <rect x="39" y="47" width="23" height="11" rx="3" fill="#FF8C5A"/>
+    <!-- G: bottom horizontal bar -->
+    <rect x="22" y="57" width="40" height="15" rx="4" fill="#FF9F43"/>
+    <!-- Spark accent top-right -->
+    <circle cx="76" cy="20" r="5" fill="#FF6B9D"/>
+    <circle cx="86" cy="10" r="3" fill="#FF9F43"/>
+    <circle cx="78" cy="10" r="1.8" fill="#FF6B9D" opacity=".6"/>
+  </symbol>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <svg class="genie-logo-svg" viewBox="0 0 96 96"><use href="#genie-mark"/></svg>
+    <span class="nav-title">GENIE.exe</span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-badge">AI Mind Reader &middot; ANURAG.exe</span>
+    <a class="nav-link" href="https://github.com/instai4" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a class="nav-link" href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="fa-solid fa-globe"></i></a>
+  </div>
+</nav>
+
+<!-- ENTRY SCREEN -->
+<div id="entry">
+  <!-- Entry logo is inline with the GENIE.exe title lockup below -->
+
+  <div class="entry-title">
+    THINK OF<br><span class="stroke">ANYTHING</span>
+  </div>
+  <!-- Inline logo + brand lockup below title -->
+  <div style="display:flex;align-items:center;gap:.75rem;margin-top:-.4rem">
+    <svg width="44" height="44" viewBox="0 0 96 96" style="filter:drop-shadow(0 0 12px rgba(255,107,157,.55))"><use href="#genie-mark"/></svg>
+    <span style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:.08em;background:linear-gradient(90deg,#FF6B9D,#FF9F43);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">GENIE.exe</span>
+  </div>
+  <p class="entry-sub">
+    I am the all-knowing Genie. Think of any person, character, or animal —
+    real or fictional. Answer my questions and I will read your mind.
+  </p>
+
+  <div class="powered-badge">
+    <div class="dot"></div>
+    Powered by Multi-AI &middot; Grok / Groq / Gemini fallback
+  </div>
+
+  <div class="cat-wrap">
+    <span class="cat-label"><i class="fa-solid fa-grid-2"></i> &nbsp;What can I guess?</span>
+    <div class="cat-chips">
+      <div class="cat-chip on" data-c="real"><i class="fa-solid fa-user"></i> Real People</div>
+      <div class="cat-chip on" data-c="fictional"><i class="fa-solid fa-masks-theater"></i> Fictional Characters</div>
+      <div class="cat-chip on" data-c="anime"><i class="fa-solid fa-torii-gate"></i> Anime / Manga</div>
+      <div class="cat-chip on" data-c="games"><i class="fa-solid fa-gamepad"></i> Game Characters</div>
+      <div class="cat-chip on" data-c="animals"><i class="fa-solid fa-paw"></i> Animals</div>
+      <div class="cat-chip on" data-c="movies"><i class="fa-solid fa-clapperboard"></i> Movie / TV</div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">
+    <i class="fa-solid fa-brain"></i> Read My Mind
+  </button>
+</div>
+
+<!-- GAME -->
+<div class="wrapper">
+  <div id="game">
+
+    <div class="game-topbar">
+      <div class="gtb-left">
+        <div class="gtb-stat">
+          <div class="gtb-val" id="q-count">0</div>
+          <div class="gtb-lbl">Questions</div>
+        </div>
+        <div class="gtb-sep"></div>
+        <div class="gtb-stat">
+          <div class="gtb-val" id="conf-val">0%</div>
+          <div class="gtb-lbl">Confidence</div>
+        </div>
+      </div>
+      <div class="gtb-category" id="cat-display">All Categories</div>
+    </div>
+
+    <!-- Progress bar label updated — no max limit shown -->
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span class="prog-label"><i class="fa-solid fa-chart-line" style="margin-right:.3rem"></i>Progress</span>
+        <span class="prog-val" id="prog-text">0 questions asked</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Genie avatar using geometric logo -->
+    <div class="genie-wrap">
+      <div class="genie-avatar" id="genie-face">
+        <svg width="56" height="56" viewBox="0 0 96 96" id="genie-logo-game"><use href="#genie-mark"/></svg>
+      </div>
+      <span class="genie-name">&gt;_ GENIE.exe is reading your mind...</span>
+    </div>
+
+    <div class="thinking-wrap" id="thinking" style="display:none">
+      <div class="thinking-dots"><span></span><span></span><span></span></div>
+      <span id="thinking-txt">Consulting the cosmic database...</span>
+    </div>
+
+    <div class="bubble" id="bubble" style="display:none">
+      <div class="bubble-text" id="bubble-text">...</div>
+      <div class="bubble-sub" id="bubble-sub"></div>
+    </div>
+
+    <div class="answers" id="answers" style="display:none">
+      <button class="ans-btn yes" onclick="answer('YES')"><i class="fa-solid fa-check"></i> Yes</button>
+      <button class="ans-btn no" onclick="answer('NO')"><i class="fa-solid fa-xmark"></i> No</button>
+      <button class="ans-btn prob" onclick="answer('PROBABLY')"><i class="fa-solid fa-circle-question"></i> Probably</button>
+      <button class="ans-btn dontknow" onclick="answer('DONT_KNOW')"><i class="fa-solid fa-face-meh"></i> Don't Know</button>
+    </div>
+
+    <div class="result-card" id="result-card" style="display:none">
+      <span class="result-icon" id="res-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+      <div class="result-title" id="res-title">MY GUESS IS...</div>
+      <div class="result-guess" id="res-guess">...</div>
+      <div class="result-stats">
+        <div class="rstat">
+          <div class="rstat-val" id="res-q">0</div>
+          <div class="rstat-lbl">Questions</div>
+        </div>
+        <div class="rstat">
+          <div class="rstat-val" id="res-conf">0%</div>
+          <div class="rstat-lbl">Confidence</div>
+        </div>
+      </div>
+      <p class="result-sub" id="res-sub">Was I right?</p>
+      <div id="feedback-btns" style="display:flex;gap:.6rem;margin-top:1.2rem;justify-content:center;flex-wrap:wrap">
+        <button class="ans-btn yes" style="max-width:160px" onclick="onCorrect()"><i class="fa-solid fa-check"></i> Yes, correct!</button>
+        <button class="ans-btn no" style="max-width:160px" onclick="onWrong()"><i class="fa-solid fa-xmark"></i> No, wrong!</button>
+      </div>
+    </div>
+
+    <div class="history" id="history" style="display:none">
+      <div class="hist-label">&gt;_ Question log</div>
+      <div id="hist-items"></div>
+    </div>
+
+    <div class="ctrl-row">
+      <button class="ctrl-btn" onclick="restartGame()"><i class="fa-solid fa-rotate"></i> New Game</button>
+      <button class="ctrl-btn" onclick="goToEntry()"><i class="fa-solid fa-sliders"></i> Settings</button>
+      <button class="ctrl-btn" onclick="forceGuess()"><i class="fa-solid fa-brain"></i> Make Guess</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer-bar">
+  <span class="footer-credit">
+    Built by <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank">ANURAG RAJPUT</a>
+    &middot; Data Science Student @ DBUU
+  </span>
+  <div class="footer-links">
+    <a href="https://github.com/instai4" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a href="https://www.linkedin.com/in/anurag-singh-43230a380/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="fa-solid fa-globe"></i></a>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
