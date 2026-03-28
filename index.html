@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GENIE.exe | AI Mind Reader | by Anurag Rajput</title>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -29,19 +29,21 @@
     body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,107,157,.08),transparent 70%)}
 
+    /* CURSOR */
     #cursor{pointer-events:none;position:fixed;z-index:9999;width:14px;height:14px;
       background:rgba(255,107,157,.25);border-radius:50%;border:2px solid var(--pink);
       transition:width .15s var(--spring),height .15s var(--spring),background .15s;
       transform:translate(-50%,-50%)}
 
+    /* NAV */
     nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;
       display:flex;align-items:center;justify-content:space-between;padding:0 2rem;
       background:rgba(12,12,24,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
     .nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
-    .nav-logo{width:32px;height:32px;border-radius:8px;
-      background:linear-gradient(135deg,var(--pink),var(--purple));
-      display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#fff;
-      box-shadow:0 0 14px rgba(255,107,157,.3)}
+
+    /* ABSTRACT GEOMETRIC LOGO */
+    .genie-logo-svg{width:32px;height:32px;flex-shrink:0}
+
     .nav-title{font-family:var(--ff);font-size:1rem;font-weight:800;
       background:linear-gradient(90deg,var(--pink),var(--purple));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -54,22 +56,21 @@
       transition:all .15s var(--spring)}
     .nav-link:hover{background:var(--border2);color:var(--txt);transform:scale(1.08)}
 
-    .wrapper{
-      position:relative;z-index:1;width:100%;max-width:680px;
-      padding:80px 1.2rem 2rem;
-      display:flex;flex-direction:column;align-items:center;gap:1.4rem;
-    }
+    .wrapper{position:relative;z-index:1;width:100%;max-width:680px;
+      padding:80px 1.2rem 2rem;display:flex;flex-direction:column;align-items:center;gap:1.4rem}
 
-    /* GENIE */
+    /* GENIE AVATAR - large version */
     .genie-wrap{display:flex;flex-direction:column;align-items:center;gap:.5rem;
       animation:genie-float 4s ease-in-out infinite}
     @keyframes genie-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    .genie-avatar-container{position:relative;width:100px;height:100px}
     .genie-avatar{width:100px;height:100px;border-radius:50%;
       background:linear-gradient(135deg,var(--pink),var(--purple));
       border:3px solid var(--pink);
       box-shadow:0 0 30px rgba(255,107,157,.35),0 0 60px rgba(192,132,252,.15);
-      display:flex;align-items:center;justify-content:center;font-size:2.8rem;
-      position:relative;transition:all .3s var(--spring)}
+      display:flex;align-items:center;justify-content:center;
+      position:relative;transition:all .3s var(--spring);overflow:hidden}
     .genie-avatar::before{content:'';position:absolute;inset:-6px;border-radius:50%;
       border:2px solid rgba(255,107,157,.2);
       animation:pulse-ring 2s ease-out infinite}
@@ -113,7 +114,7 @@
     .ans-btn.dontknow:hover{background:rgba(154,152,200,.08);color:var(--txt2)}
     .ans-btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
 
-    /* PROGRESS */
+    /* PROGRESS — no max, shows questions asked */
     .progress-wrap{width:100%}
     .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
     .prog-label{font-family:var(--fm);font-size:.6rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em}
@@ -144,7 +145,9 @@
     .result-card{width:100%;background:var(--card);border:2px solid var(--border2);
       border-radius:16px;padding:2rem;text-align:center;
       box-shadow:6px 6px 0 var(--border);animation:bubble-in .4s var(--spring)}
-    .result-emoji{font-size:3.5rem;margin-bottom:.8rem;display:block}
+    .result-icon{font-size:2.5rem;margin-bottom:.8rem;display:block;color:var(--pink)}
+    .result-icon.win-icon{color:var(--green)}
+    .result-icon.lose-icon{color:var(--red)}
     .result-title{font-family:var(--ff);font-size:1.5rem;font-weight:800;color:var(--txt);margin-bottom:.4rem}
     .result-title.win{color:var(--green)}
     .result-title.lose{color:var(--red)}
@@ -174,25 +177,24 @@
       gap:1.5rem;padding:2rem;text-align:center;
       transition:opacity .5s ease,transform .5s ease}
     #entry.hide{opacity:0;pointer-events:none;transform:scale(1.04)}
-    .entry-genie{font-size:4rem;animation:genie-float 3s ease-in-out infinite;
-      filter:drop-shadow(0 0 20px rgba(255,107,157,.4))}
+
+    /* Large entry logo */
+    .entry-logo{display:flex;align-items:center;justify-content:center;
+      animation:genie-float 3s ease-in-out infinite}
+
     .entry-title{font-family:var(--ff);font-size:clamp(2.5rem,9vw,4.5rem);font-weight:800;
       text-transform:uppercase;letter-spacing:-.03em;line-height:.9}
     .entry-title .stroke{-webkit-text-stroke:2px var(--pink);color:transparent}
     .entry-sub{font-family:var(--fm);font-size:.75rem;color:var(--txt2);max-width:380px;line-height:1.7}
 
-    /* powered by badge */
-    .powered-badge{
-      display:flex;align-items:center;gap:.5rem;
+    .powered-badge{display:flex;align-items:center;gap:.5rem;
       font-family:var(--fm);font-size:.62rem;color:var(--txt3);
       background:var(--surface);border:1px solid var(--border);
-      padding:.4rem .9rem;border-radius:20px;
-    }
+      padding:.4rem .9rem;border-radius:20px}
     .powered-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
       animation:blink 1.5s step-end infinite}
     @keyframes blink{50%{opacity:0}}
 
-    /* category */
     .cat-wrap{width:100%;max-width:480px}
     .cat-label{font-family:var(--fm);font-size:.6rem;color:var(--txt2);
       text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;display:block}
@@ -200,11 +202,11 @@
     .cat-chip{padding:.3rem .75rem;border-radius:20px;
       background:var(--card);border:1px solid var(--border2);
       font-family:var(--fm);font-size:.62rem;color:var(--txt2);
-      cursor:pointer;transition:all .15s var(--spring);user-select:none}
+      cursor:pointer;transition:all .15s var(--spring);user-select:none;
+      display:flex;align-items:center;gap:.35rem}
     .cat-chip:hover{border-color:var(--pink);color:var(--txt)}
     .cat-chip.on{background:rgba(255,107,157,.1);border-color:var(--pink);color:var(--pink)}
 
-    /* start btn */
     .start-btn{padding:1rem 3rem;border-radius:10px;border:3px solid var(--pink);
       background:var(--pink);color:#0C0C18;
       font-family:var(--ff);font-size:1.1rem;font-weight:800;cursor:pointer;
@@ -213,7 +215,6 @@
     .start-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(255,107,157,.3)}
     .start-btn:active{transform:translate(2px,2px);box-shadow:none}
 
-    /* CTRL */
     .ctrl-row{display:flex;gap:.5rem;width:100%}
     .ctrl-btn{flex:1;padding:.65rem;border-radius:8px;border:1px solid var(--border2);
       background:var(--surface);color:var(--txt2);
@@ -224,7 +225,6 @@
 
     #game{display:none;width:100%}
 
-    /* GAME TOPBAR */
     .game-topbar{display:flex;align-items:center;justify-content:space-between;
       width:100%;background:var(--card);border:1px solid var(--border);
       border-radius:10px;padding:.7rem 1rem}
@@ -237,7 +237,6 @@
       background:rgba(78,205,196,.08);border:1px solid rgba(78,205,196,.2);
       padding:3px 10px;border-radius:20px}
 
-    /* FOOTER */
     .footer-bar{position:relative;z-index:1;width:100%;max-width:680px;
       display:flex;align-items:center;justify-content:space-between;
       padding:.6rem 1.2rem;border-top:1px solid var(--border);flex-wrap:wrap;gap:.4rem;margin-top:auto}
@@ -262,49 +261,88 @@
 <body>
 <div id="cursor"></div>
 
+<!-- ABSTRACT GEOMETRIC GENIE LOGO SVG (reusable inline) -->
+<svg style="display:none">
+  <symbol id="genie-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer hexagon ring -->
+    <polygon points="32,4 56,18 56,46 32,60 8,46 8,18"
+      stroke="url(#gm-grad1)" stroke-width="2.5" fill="none" opacity=".7"/>
+    <!-- Inner rotated square -->
+    <rect x="20" y="20" width="24" height="24" rx="3"
+      transform="rotate(45 32 32)"
+      fill="url(#gm-grad2)" opacity=".18"/>
+    <!-- Diamond center -->
+    <polygon points="32,16 44,32 32,48 20,32"
+      fill="none" stroke="url(#gm-grad1)" stroke-width="2"/>
+    <!-- Core dot -->
+    <circle cx="32" cy="32" r="5" fill="url(#gm-grad1)"/>
+    <!-- Corner accents -->
+    <circle cx="32" cy="7"  r="2.2" fill="#FF6B9D" opacity=".9"/>
+    <circle cx="32" cy="57" r="2.2" fill="#C084FC" opacity=".9"/>
+    <circle cx="9"  cy="20" r="1.8" fill="#FF6B9D" opacity=".6"/>
+    <circle cx="55" cy="20" r="1.8" fill="#C084FC" opacity=".6"/>
+    <circle cx="9"  cy="44" r="1.8" fill="#C084FC" opacity=".6"/>
+    <circle cx="55" cy="44" r="1.8" fill="#FF6B9D" opacity=".6"/>
+    <defs>
+      <linearGradient id="gm-grad1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#FF6B9D"/>
+        <stop offset="100%" stop-color="#C084FC"/>
+      </linearGradient>
+      <linearGradient id="gm-grad2" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#FF6B9D"/>
+        <stop offset="100%" stop-color="#C084FC"/>
+      </linearGradient>
+    </defs>
+  </symbol>
+</svg>
+
 <!-- NAV -->
 <nav>
   <a class="nav-brand" href="#">
-    <div class="nav-logo">🧞</div>
+    <svg class="genie-logo-svg" viewBox="0 0 64 64"><use href="#genie-mark"/></svg>
     <span class="nav-title">GENIE.exe</span>
   </a>
   <div class="nav-right">
-    <span class="nav-badge">AI Mind Reader · ANURAG.exe</span>
-    <a class="nav-link" href="https://github.com/instai4" target="_blank"><i class="ri-github-fill"></i></a>
-    <a class="nav-link" href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="ri-global-line"></i></a>
+    <span class="nav-badge">AI Mind Reader &middot; ANURAG.exe</span>
+    <a class="nav-link" href="https://github.com/instai4" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a class="nav-link" href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="fa-solid fa-globe"></i></a>
   </div>
 </nav>
 
 <!-- ENTRY SCREEN -->
 <div id="entry">
-  <div class="entry-genie">🧞</div>
+  <!-- Big geometric logo on entry -->
+  <div class="entry-logo">
+    <svg width="96" height="96" viewBox="0 0 64 64"><use href="#genie-mark"/></svg>
+  </div>
+
   <div class="entry-title">
     THINK OF<br><span class="stroke">ANYTHING</span>
   </div>
   <p class="entry-sub">
     I am the all-knowing Genie. Think of any person, character, or animal —
-    real or fictional. Answer my questions and I will read your mind in 20 questions or less.
+    real or fictional. Answer my questions and I will read your mind.
   </p>
 
   <div class="powered-badge">
     <div class="dot"></div>
-    Powered by Gemini AI · Free for everyone · No login needed
+    Powered by Multi-AI &middot; Grok / Groq / Gemini fallback
   </div>
 
   <div class="cat-wrap">
-    <span class="cat-label"><i class="ri-layout-grid-line"></i> &nbsp;What can I guess?</span>
+    <span class="cat-label"><i class="fa-solid fa-grid-2"></i> &nbsp;What can I guess?</span>
     <div class="cat-chips">
-      <div class="cat-chip on" data-c="real">🧑 Real People</div>
-      <div class="cat-chip on" data-c="fictional">🎭 Fictional Characters</div>
-      <div class="cat-chip on" data-c="anime">⛩️ Anime / Manga</div>
-      <div class="cat-chip on" data-c="games">🎮 Game Characters</div>
-      <div class="cat-chip on" data-c="animals">🦁 Animals</div>
-      <div class="cat-chip on" data-c="movies">🎬 Movie / TV</div>
+      <div class="cat-chip on" data-c="real"><i class="fa-solid fa-user"></i> Real People</div>
+      <div class="cat-chip on" data-c="fictional"><i class="fa-solid fa-masks-theater"></i> Fictional Characters</div>
+      <div class="cat-chip on" data-c="anime"><i class="fa-solid fa-torii-gate"></i> Anime / Manga</div>
+      <div class="cat-chip on" data-c="games"><i class="fa-solid fa-gamepad"></i> Game Characters</div>
+      <div class="cat-chip on" data-c="animals"><i class="fa-solid fa-paw"></i> Animals</div>
+      <div class="cat-chip on" data-c="movies"><i class="fa-solid fa-clapperboard"></i> Movie / TV</div>
     </div>
   </div>
 
   <button class="start-btn" onclick="startGame()">
-    <i class="ri-mind-map"></i> Read My Mind
+    <i class="fa-solid fa-brain"></i> Read My Mind
   </button>
 </div>
 
@@ -327,19 +365,23 @@
       <div class="gtb-category" id="cat-display">All Categories</div>
     </div>
 
+    <!-- Progress bar label updated — no max limit shown -->
     <div class="progress-wrap">
       <div class="progress-top">
-        <span class="prog-label">Questions used</span>
-        <span class="prog-val" id="prog-text">0 / 20</span>
+        <span class="prog-label"><i class="fa-solid fa-chart-line" style="margin-right:.3rem"></i>Progress</span>
+        <span class="prog-val" id="prog-text">0 questions asked</span>
       </div>
       <div class="progress-bar">
         <div class="progress-fill" id="prog-fill" style="width:0%"></div>
       </div>
     </div>
 
+    <!-- Genie avatar using geometric logo -->
     <div class="genie-wrap">
-      <div class="genie-avatar" id="genie-face">🧞</div>
-      <span class="genie-name">>_ GENIE.exe is reading your mind...</span>
+      <div class="genie-avatar" id="genie-face">
+        <svg width="56" height="56" viewBox="0 0 64 64" id="genie-logo-game"><use href="#genie-mark"/></svg>
+      </div>
+      <span class="genie-name">&gt;_ GENIE.exe is reading your mind...</span>
     </div>
 
     <div class="thinking-wrap" id="thinking" style="display:none">
@@ -353,14 +395,14 @@
     </div>
 
     <div class="answers" id="answers" style="display:none">
-      <button class="ans-btn yes" onclick="answer('YES')">✅ Yes</button>
-      <button class="ans-btn no" onclick="answer('NO')">❌ No</button>
-      <button class="ans-btn prob" onclick="answer('PROBABLY')">🤔 Probably</button>
-      <button class="ans-btn dontknow" onclick="answer('DONT_KNOW')">🤷 Don't Know</button>
+      <button class="ans-btn yes" onclick="answer('YES')"><i class="fa-solid fa-check"></i> Yes</button>
+      <button class="ans-btn no" onclick="answer('NO')"><i class="fa-solid fa-xmark"></i> No</button>
+      <button class="ans-btn prob" onclick="answer('PROBABLY')"><i class="fa-solid fa-circle-question"></i> Probably</button>
+      <button class="ans-btn dontknow" onclick="answer('DONT_KNOW')"><i class="fa-solid fa-face-meh"></i> Don't Know</button>
     </div>
 
     <div class="result-card" id="result-card" style="display:none">
-      <span class="result-emoji" id="res-emoji">🧞</span>
+      <span class="result-icon" id="res-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
       <div class="result-title" id="res-title">MY GUESS IS...</div>
       <div class="result-guess" id="res-guess">...</div>
       <div class="result-stats">
@@ -375,20 +417,20 @@
       </div>
       <p class="result-sub" id="res-sub">Was I right?</p>
       <div id="feedback-btns" style="display:flex;gap:.6rem;margin-top:1.2rem;justify-content:center;flex-wrap:wrap">
-        <button class="ans-btn yes" style="max-width:160px" onclick="onCorrect()">✅ Yes, correct!</button>
-        <button class="ans-btn no" style="max-width:160px" onclick="onWrong()">❌ No, wrong!</button>
+        <button class="ans-btn yes" style="max-width:160px" onclick="onCorrect()"><i class="fa-solid fa-check"></i> Yes, correct!</button>
+        <button class="ans-btn no" style="max-width:160px" onclick="onWrong()"><i class="fa-solid fa-xmark"></i> No, wrong!</button>
       </div>
     </div>
 
     <div class="history" id="history" style="display:none">
-      <div class="hist-label">>_ Question log</div>
+      <div class="hist-label">&gt;_ Question log</div>
       <div id="hist-items"></div>
     </div>
 
     <div class="ctrl-row">
-      <button class="ctrl-btn" onclick="restartGame()"><i class="ri-refresh-line"></i> New Game</button>
-      <button class="ctrl-btn" onclick="goToEntry()"><i class="ri-settings-3-line"></i> Settings</button>
-      <button class="ctrl-btn" onclick="forceGuess()"><i class="ri-brain-line"></i> Make Guess</button>
+      <button class="ctrl-btn" onclick="restartGame()"><i class="fa-solid fa-rotate"></i> New Game</button>
+      <button class="ctrl-btn" onclick="goToEntry()"><i class="fa-solid fa-sliders"></i> Settings</button>
+      <button class="ctrl-btn" onclick="forceGuess()"><i class="fa-solid fa-brain"></i> Make Guess</button>
     </div>
 
   </div>
@@ -397,12 +439,12 @@
 <div class="footer-bar">
   <span class="footer-credit">
     Built by <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank">ANURAG RAJPUT</a>
-    · Data Science Student @ DBUU
+    &middot; Data Science Student @ DBUU
   </span>
   <div class="footer-links">
-    <a href="https://github.com/instai4" target="_blank"><i class="ri-github-fill"></i></a>
-    <a href="https://www.linkedin.com/in/anurag-singh-43230a380/" target="_blank"><i class="ri-linkedin-fill"></i></a>
-    <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="ri-global-line"></i></a>
+    <a href="https://github.com/instai4" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a href="https://www.linkedin.com/in/anurag-singh-43230a380/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="fa-solid fa-globe"></i></a>
   </div>
 </div>
 
@@ -420,14 +462,13 @@ document.querySelectorAll('.cat-chip').forEach(c => {
   c.addEventListener('click', () => c.classList.toggle('on'));
 });
 
-/* STATE */
+/* STATE — no MAX_Q limit */
 let gameHistory = [];
 let questionCount = 0;
 let confidence = 0;
 let currentGuess = '';
 let gameOver = false;
 let selectedCategories = [];
-const MAX_Q = 20;
 
 /* HELPERS */
 function setThinking(show, msg='Consulting the cosmic database...') {
@@ -441,9 +482,10 @@ function setThinking(show, msg='Consulting the cosmic database...') {
 }
 
 function updateProgress() {
-  const pct = Math.min((questionCount / MAX_Q) * 100, 100);
+  // Progress bar: fills smoothly based on confidence (0-100%)
+  const pct = Math.min(confidence, 100);
   document.getElementById('prog-fill').style.width = pct + '%';
-  document.getElementById('prog-text').textContent = questionCount + ' / ' + MAX_Q;
+  document.getElementById('prog-text').textContent = questionCount + ' question' + (questionCount !== 1 ? 's' : '') + ' asked';
   document.getElementById('q-count').textContent = questionCount;
   document.getElementById('conf-val').textContent = Math.round(confidence) + '%';
 }
@@ -461,7 +503,7 @@ function addToHistory(q, a) {
   document.getElementById('history').style.display = 'block';
 }
 
-/* BUILD PROMPT */
+/* BUILD PROMPT — no question limit, stops only on correct guess */
 function buildSystemPrompt() {
   const cats = selectedCategories.join(', ');
   return `You are GENIE, an all-knowing AI playing the Akinator game. The user is thinking of something from these categories: ${cats}.
@@ -471,12 +513,13 @@ Your job: Ask ONE yes/no question at a time to narrow down what the user is thin
 RULES:
 1. Ask only ONE question per response.
 2. Questions must be answerable with Yes, No, Probably, or Don't Know.
-3. Start broad then get progressively more specific.
-4. After 6+ answers, start making educated guesses.
+3. Start broad, then get progressively more specific.
+4. After gathering enough information, make educated guesses when confidence is high.
 5. When confidence > 80%, make your guess using isGuess:true.
-6. If your guess is wrong, ask more questions.
+6. If your guess is WRONG (user answered No to your guess), keep asking more questions.
 7. Never repeat a previous question.
 8. Keep questions short and clear.
+9. There is NO question limit — keep going until you guess correctly.
 
 Respond ONLY in this exact JSON format (no markdown, no extra text):
 {"question":"Your question here","confidence":45,"isGuess":false,"guess":""}
@@ -494,12 +537,12 @@ function buildMessages() {
   if (msgs.length === 0) {
     msgs.push({ role:'user', parts:[{ text:'Start the game. Ask your first question.' }] });
   } else {
-    msgs.push({ role:'user', parts:[{ text:'Continue asking or make a guess if confident enough.' }] });
+    msgs.push({ role:'user', parts:[{ text:'Continue asking or make a guess if confident enough. Keep going until you get it right — there is no question limit.' }] });
   }
   return msgs;
 }
 
-/* CALL BACKEND PROXY */
+/* CALL BACKEND — uses the multi-provider /api/gemini endpoint */
 async function callGemini(overrideBody = null) {
   const body = overrideBody || {
     systemPrompt: buildSystemPrompt(),
@@ -537,12 +580,19 @@ function startGame() {
   askNext();
 }
 
-/* ASK NEXT */
+/* ASK NEXT — no question cap, runs until correct guess */
 async function askNext() {
   if (gameOver) return;
-  if (questionCount >= MAX_Q) { forceGuess(); return; }
 
-  setThinking(true, questionCount < 5 ? 'Reading the cosmic waves...' : questionCount < 12 ? 'Narrowing it down...' : 'Almost there...');
+  const msg = questionCount < 5
+    ? 'Reading the cosmic waves...'
+    : questionCount < 15
+    ? 'Narrowing it down...'
+    : questionCount < 30
+    ? 'Getting warmer...'
+    : 'Going deeper...';
+
+  setThinking(true, msg);
 
   try {
     const resp = await callGemini();
@@ -553,15 +603,13 @@ async function askNext() {
     if (resp.isGuess && resp.guess) {
       currentGuess = resp.guess;
       document.getElementById('bubble-text').textContent = resp.question || `Is it ${resp.guess}?`;
-      document.getElementById('bubble-sub').textContent = `🔮 My confidence: ${Math.round(resp.confidence)}%`;
+      document.getElementById('bubble-sub').textContent = `Confidence: ${Math.round(resp.confidence)}%`;
     } else {
       currentGuess = '';
       document.getElementById('bubble-text').textContent = resp.question;
       document.getElementById('bubble-sub').textContent = questionCount < 5
-        ? '💭 Think carefully and answer honestly...'
-        : questionCount < 12
-        ? `🔮 Confidence: ${Math.round(resp.confidence)}% — getting warmer`
-        : `🔥 Very close! Confidence: ${Math.round(resp.confidence)}%`;
+        ? 'Think carefully and answer honestly...'
+        : `Confidence: ${Math.round(resp.confidence)}%`;
     }
     document.getElementById('bubble').style.display = 'block';
     document.getElementById('answers').style.display = 'grid';
@@ -570,7 +618,7 @@ async function askNext() {
 
   } catch(err) {
     setThinking(false);
-    document.getElementById('bubble-text').textContent = '⚠️ ' + err.message;
+    document.getElementById('bubble-text').textContent = 'Error: ' + err.message;
     document.getElementById('bubble-sub').textContent = 'Check your connection or try again.';
     document.getElementById('bubble').style.display = 'block';
     document.getElementById('answers').style.display = 'none';
@@ -582,7 +630,12 @@ function answer(ans) {
   const currentQ = document.getElementById('bubble-text').textContent;
   if (currentGuess) {
     addToHistory(currentQ, ans);
-    if (ans === 'YES') { showResult(true, currentGuess); return; }
+    if (ans === 'YES') {
+      // Correct guess — show win result
+      showResult(true, currentGuess);
+      return;
+    }
+    // Wrong guess — reset and keep asking
     currentGuess = '';
     askNext();
     return;
@@ -591,12 +644,12 @@ function answer(ans) {
   askNext();
 }
 
-/* FORCE GUESS */
+/* FORCE GUESS (manual trigger) */
 async function forceGuess() {
   if (gameOver) return;
   setThinking(true, 'Summoning my final answer...');
   try {
-    const historyText = gameHistory.map((h,i) => `Q${i+1}: ${h.q} → ${h.a}`).join('\n');
+    const historyText = gameHistory.map((h,i) => `Q${i+1}: ${h.q} -> ${h.a}`).join('\n');
     const forcePrompt = `You are playing Akinator. Based on this Q&A history, make your best single guess.
 Categories: ${selectedCategories.join(', ')}
 
@@ -632,14 +685,16 @@ function showResult(correct, guess, reasoning='') {
   document.getElementById('res-conf').textContent = Math.round(confidence) + '%';
 
   if (correct === true) {
-    document.getElementById('res-emoji').textContent = '🎉';
+    document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-trophy"></i>';
+    document.getElementById('res-icon').className = 'result-icon win-icon';
     document.getElementById('res-title').textContent = 'I GOT IT!';
     document.getElementById('res-title').className = 'result-title win';
-    document.getElementById('res-sub').textContent = `✨ I read your mind in just ${questionCount} questions!`;
+    document.getElementById('res-sub').textContent = `I read your mind in ${questionCount} questions!`;
     document.getElementById('feedback-btns').style.display = 'none';
     document.getElementById('genie-face').classList.add('win');
   } else {
-    document.getElementById('res-emoji').textContent = '🔮';
+    document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
+    document.getElementById('res-icon').className = 'result-icon';
     document.getElementById('res-title').textContent = 'MY GUESS IS...';
     document.getElementById('res-title').className = 'result-title';
     document.getElementById('res-sub').textContent = reasoning || `After ${questionCount} questions, this is my best guess.`;
@@ -650,15 +705,17 @@ function showResult(correct, guess, reasoning='') {
 
 function onCorrect() {
   document.getElementById('genie-face').className = 'genie-avatar win';
-  document.getElementById('res-emoji').textContent = '🎉';
+  document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-trophy"></i>';
+  document.getElementById('res-icon').className = 'result-icon win-icon';
   document.getElementById('res-title').textContent = 'I GOT IT!';
   document.getElementById('res-title').className = 'result-title win';
-  document.getElementById('res-sub').textContent = `✨ The genie never fails! ${questionCount} questions.`;
+  document.getElementById('res-sub').textContent = `The genie never fails! ${questionCount} questions.`;
   document.getElementById('feedback-btns').style.display = 'none';
 }
 function onWrong() {
   document.getElementById('genie-face').className = 'genie-avatar lose';
-  document.getElementById('res-emoji').textContent = '😔';
+  document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-face-sad-tear"></i>';
+  document.getElementById('res-icon').className = 'result-icon lose-icon';
   document.getElementById('res-title').textContent = 'I WAS WRONG...';
   document.getElementById('res-title').className = 'result-title lose';
   document.getElementById('res-sub').textContent = 'You outsmarted me! Play again and I will learn.';
