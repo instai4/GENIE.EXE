@@ -1,11 +1,9 @@
 # GENIE.exe
 
-![GENIE.exe Logo](https://raw.githubusercontent.com/instai4/GENIE.exe/main/public/logo.png) <!-- Assuming a logo.png in public folder for a webapp -->
-
 A dark NeoBrutalist AI mind reader that guesses any person, character or animal using multi-provider AI (Grok / Groq / Gemini fallback).
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://genie-exe.vercel.app/)
-[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/instai4)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/instai4/GENIE.EXE)
 
 ## 🚀 Technologies Used
 
