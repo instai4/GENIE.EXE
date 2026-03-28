@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GENIE.exe | AI Mind Reader | by Anurag Rajput</title>
+  <title>GENIE.exe</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect x='6' y='6' width='84' height='84' rx='18' transform='rotate(12 48 48)' fill='none' stroke='%23FF6B9D' stroke-width='3' opacity='.8'/%3E%3Crect x='20' y='20' width='56' height='56' rx='10' transform='rotate(-12 48 48)' fill='none' stroke='%23FF9F43' stroke-width='1.5' opacity='.45'/%3E%3Crect x='22' y='26' width='15' height='46' rx='4' fill='%23FF6B9D'/%3E%3Crect x='22' y='26' width='40' height='15' rx='4' fill='%23FF6B9D'/%3E%3Crect x='39' y='47' width='23' height='11' rx='3' fill='%23FF8C5A'/%3E%3Crect x='22' y='57' width='40' height='15' rx='4' fill='%23FF9F43'/%3E%3Ccircle cx='76' cy='20' r='5' fill='%23FF6B9D'/%3E%3Ccircle cx='86' cy='10' r='3' fill='%23FF9F43'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -41,12 +42,16 @@
       background:rgba(12,12,24,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
     .nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
 
-    /* ABSTRACT GEOMETRIC LOGO */
-    .genie-logo-svg{width:32px;height:32px;flex-shrink:0}
+    /* SHATTERED G LOGO */
+    .genie-logo-svg{width:36px;height:36px;flex-shrink:0;
+      filter:drop-shadow(0 0 8px rgba(255,107,157,.45));
+      transition:filter .2s var(--spring)}
+    .nav-brand:hover .genie-logo-svg{filter:drop-shadow(0 0 16px rgba(255,107,157,.75))}
 
     .nav-title{font-family:var(--ff);font-size:1rem;font-weight:800;
-      background:linear-gradient(90deg,var(--pink),var(--purple));
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+      background:linear-gradient(90deg,var(--pink),var(--orange));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      letter-spacing:.04em}
     .nav-right{display:flex;align-items:center;gap:.5rem}
     .nav-badge{font-family:var(--fm);font-size:.58rem;color:var(--txt3);
       background:var(--surface);border:1px solid var(--border);padding:3px 8px;border-radius:20px}
@@ -66,7 +71,7 @@
 
     .genie-avatar-container{position:relative;width:100px;height:100px}
     .genie-avatar{width:100px;height:100px;border-radius:50%;
-      background:linear-gradient(135deg,var(--pink),var(--purple));
+      
       border:3px solid var(--pink);
       box-shadow:0 0 30px rgba(255,107,157,.35),0 0 60px rgba(192,132,252,.15);
       display:flex;align-items:center;justify-content:center;
@@ -261,45 +266,36 @@
 <body>
 <div id="cursor"></div>
 
-<!-- ABSTRACT GEOMETRIC GENIE LOGO SVG (reusable inline) -->
+<!-- SHATTERED G LOGO — reusable symbol (no gradient refs inside symbol — use hardcoded hex) -->
 <svg style="display:none">
-  <symbol id="genie-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Outer hexagon ring -->
-    <polygon points="32,4 56,18 56,46 32,60 8,46 8,18"
-      stroke="url(#gm-grad1)" stroke-width="2.5" fill="none" opacity=".7"/>
-    <!-- Inner rotated square -->
-    <rect x="20" y="20" width="24" height="24" rx="3"
-      transform="rotate(45 32 32)"
-      fill="url(#gm-grad2)" opacity=".18"/>
-    <!-- Diamond center -->
-    <polygon points="32,16 44,32 32,48 20,32"
-      fill="none" stroke="url(#gm-grad1)" stroke-width="2"/>
-    <!-- Core dot -->
-    <circle cx="32" cy="32" r="5" fill="url(#gm-grad1)"/>
-    <!-- Corner accents -->
-    <circle cx="32" cy="7"  r="2.2" fill="#FF6B9D" opacity=".9"/>
-    <circle cx="32" cy="57" r="2.2" fill="#C084FC" opacity=".9"/>
-    <circle cx="9"  cy="20" r="1.8" fill="#FF6B9D" opacity=".6"/>
-    <circle cx="55" cy="20" r="1.8" fill="#C084FC" opacity=".6"/>
-    <circle cx="9"  cy="44" r="1.8" fill="#C084FC" opacity=".6"/>
-    <circle cx="55" cy="44" r="1.8" fill="#FF6B9D" opacity=".6"/>
-    <defs>
-      <linearGradient id="gm-grad1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#FF6B9D"/>
-        <stop offset="100%" stop-color="#C084FC"/>
-      </linearGradient>
-      <linearGradient id="gm-grad2" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#FF6B9D"/>
-        <stop offset="100%" stop-color="#C084FC"/>
-      </linearGradient>
-    </defs>
+  <symbol id="genie-mark" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer rotated square frame -->
+    <rect x="6" y="6" width="84" height="84" rx="18"
+      transform="rotate(12 48 48)"
+      fill="none" stroke="#FF6B9D" stroke-width="2.5" opacity=".8"/>
+    <!-- Inner counter-rotated square -->
+    <rect x="20" y="20" width="56" height="56" rx="10"
+      transform="rotate(-12 48 48)"
+      fill="none" stroke="#FF9F43" stroke-width="1.5" opacity=".45"/>
+    <!-- G: left vertical bar -->
+    <rect x="22" y="26" width="15" height="46" rx="4" fill="#FF6B9D"/>
+    <!-- G: top horizontal bar -->
+    <rect x="22" y="26" width="40" height="15" rx="4" fill="#FF6B9D"/>
+    <!-- G: middle crossbar — slightly different tone -->
+    <rect x="39" y="47" width="23" height="11" rx="3" fill="#FF8C5A"/>
+    <!-- G: bottom horizontal bar -->
+    <rect x="22" y="57" width="40" height="15" rx="4" fill="#FF9F43"/>
+    <!-- Spark accent top-right -->
+    <circle cx="76" cy="20" r="5" fill="#FF6B9D"/>
+    <circle cx="86" cy="10" r="3" fill="#FF9F43"/>
+    <circle cx="78" cy="10" r="1.8" fill="#FF6B9D" opacity=".6"/>
   </symbol>
 </svg>
 
 <!-- NAV -->
 <nav>
   <a class="nav-brand" href="#">
-    <svg class="genie-logo-svg" viewBox="0 0 64 64"><use href="#genie-mark"/></svg>
+    <svg class="genie-logo-svg" viewBox="0 0 96 96"><use href="#genie-mark"/></svg>
     <span class="nav-title">GENIE.exe</span>
   </a>
   <div class="nav-right">
@@ -311,13 +307,15 @@
 
 <!-- ENTRY SCREEN -->
 <div id="entry">
-  <!-- Big geometric logo on entry -->
-  <div class="entry-logo">
-    <svg width="96" height="96" viewBox="0 0 64 64"><use href="#genie-mark"/></svg>
-  </div>
+  <!-- Entry logo is inline with the GENIE.exe title lockup below -->
 
   <div class="entry-title">
     THINK OF<br><span class="stroke">ANYTHING</span>
+  </div>
+  <!-- Inline logo + brand lockup below title -->
+  <div style="display:flex;align-items:center;gap:.75rem;margin-top:-.4rem">
+    <svg width="44" height="44" viewBox="0 0 96 96" style="filter:drop-shadow(0 0 12px rgba(255,107,157,.55))"><use href="#genie-mark"/></svg>
+    <span style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:.08em;background:linear-gradient(90deg,#FF6B9D,#FF9F43);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">GENIE.exe</span>
   </div>
   <p class="entry-sub">
     I am the all-knowing Genie. Think of any person, character, or animal —
@@ -379,7 +377,7 @@
     <!-- Genie avatar using geometric logo -->
     <div class="genie-wrap">
       <div class="genie-avatar" id="genie-face">
-        <svg width="56" height="56" viewBox="0 0 64 64" id="genie-logo-game"><use href="#genie-mark"/></svg>
+        <svg width="56" height="56" viewBox="0 0 96 96" id="genie-logo-game"><use href="#genie-mark"/></svg>
       </div>
       <span class="genie-name">&gt;_ GENIE.exe is reading your mind...</span>
     </div>
@@ -515,7 +513,7 @@ RULES:
 2. Questions must be answerable with Yes, No, Probably, or Don't Know.
 3. Start broad, then get progressively more specific.
 4. After gathering enough information, make educated guesses when confidence is high.
-5. When confidence > 80%, make your guess using isGuess:true.
+5. When confidence > 95%, make your guess using isGuess:true.
 6. If your guess is WRONG (user answered No to your guess), keep asking more questions.
 7. Never repeat a previous question.
 8. Keep questions short and clear.
@@ -609,6 +607,8 @@ async function askNext() {
       document.getElementById('bubble-text').textContent = resp.question;
       document.getElementById('bubble-sub').textContent = questionCount < 5
         ? 'Think carefully and answer honestly...'
+        : confidence >= 85
+        ? `Almost certain — Confidence: ${Math.round(resp.confidence)}%`
         : `Confidence: ${Math.round(resp.confidence)}%`;
     }
     document.getElementById('bubble').style.display = 'block';
