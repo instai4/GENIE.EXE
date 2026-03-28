@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GENIE.exe | AI Mind Reader | by Anurag Rajput</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0C0C18;--bg2:#10101E;--card:#16162A;--surface:#1C1C32;
+      --border:#262648;--border2:#34346A;
+      --txt:#F2F0FA;--txt2:#9A98C8;--txt3:#4C4A78;
+      --pink:#FF6B9D;--yellow:#FFE66D;--cyan:#4ECDC4;
+      --green:#06D6A0;--orange:#FF9F43;--purple:#C084FC;--red:#FF4757;
+      --ff:'Syne',sans-serif;--fb:'Outfit',sans-serif;--fm:'DM Mono',monospace;
+      --spring:cubic-bezier(.34,1.56,.64,1);
+    }
+    html{scroll-behavior:smooth}
+    body{
+      font-family:var(--fb);background:var(--bg);color:var(--txt);
+      min-height:100vh;cursor:none;overflow-x:hidden;
+      display:flex;flex-direction:column;align-items:center;
+    }
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:radial-gradient(rgba(255,255,255,.022) 1px,transparent 1px);
+      background-size:30px 30px}
+    body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,107,157,.08),transparent 70%)}
+
+    #cursor{pointer-events:none;position:fixed;z-index:9999;width:14px;height:14px;
+      background:rgba(255,107,157,.25);border-radius:50%;border:2px solid var(--pink);
+      transition:width .15s var(--spring),height .15s var(--spring),background .15s;
+      transform:translate(-50%,-50%)}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;
+      display:flex;align-items:center;justify-content:space-between;padding:0 2rem;
+      background:rgba(12,12,24,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+    .nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+    .nav-logo{width:32px;height:32px;border-radius:8px;
+      background:linear-gradient(135deg,var(--pink),var(--purple));
+      display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#fff;
+      box-shadow:0 0 14px rgba(255,107,157,.3)}
+    .nav-title{font-family:var(--ff);font-size:1rem;font-weight:800;
+      background:linear-gradient(90deg,var(--pink),var(--purple));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .nav-right{display:flex;align-items:center;gap:.5rem}
+    .nav-badge{font-family:var(--fm);font-size:.58rem;color:var(--txt3);
+      background:var(--surface);border:1px solid var(--border);padding:3px 8px;border-radius:20px}
+    .nav-link{width:32px;height:32px;border-radius:7px;background:var(--surface);
+      border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+      color:var(--txt2);font-size:.8rem;text-decoration:none;cursor:pointer;
+      transition:all .15s var(--spring)}
+    .nav-link:hover{background:var(--border2);color:var(--txt);transform:scale(1.08)}
+
+    .wrapper{
+      position:relative;z-index:1;width:100%;max-width:680px;
+      padding:80px 1.2rem 2rem;
+      display:flex;flex-direction:column;align-items:center;gap:1.4rem;
+    }
+
+    /* GENIE */
+    .genie-wrap{display:flex;flex-direction:column;align-items:center;gap:.5rem;
+      animation:genie-float 4s ease-in-out infinite}
+    @keyframes genie-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .genie-avatar{width:100px;height:100px;border-radius:50%;
+      background:linear-gradient(135deg,var(--pink),var(--purple));
+      border:3px solid var(--pink);
+      box-shadow:0 0 30px rgba(255,107,157,.35),0 0 60px rgba(192,132,252,.15);
+      display:flex;align-items:center;justify-content:center;font-size:2.8rem;
+      position:relative;transition:all .3s var(--spring)}
+    .genie-avatar::before{content:'';position:absolute;inset:-6px;border-radius:50%;
+      border:2px solid rgba(255,107,157,.2);
+      animation:pulse-ring 2s ease-out infinite}
+    @keyframes pulse-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.25);opacity:0}}
+    .genie-avatar.thinking{animation:genie-think .6s ease-in-out infinite alternate}
+    @keyframes genie-think{from{transform:scale(1)}to{transform:scale(1.06)}}
+    .genie-avatar.win{box-shadow:0 0 40px rgba(6,214,160,.5)!important;border-color:var(--green)!important}
+    .genie-avatar.lose{box-shadow:0 0 40px rgba(255,71,87,.4)!important;border-color:var(--red)!important}
+    .genie-name{font-family:var(--fm);font-size:.65rem;color:var(--txt3);
+      text-transform:uppercase;letter-spacing:.15em}
+
+    /* BUBBLE */
+    .bubble{background:var(--card);border:2px solid var(--border2);
+      border-radius:16px 16px 16px 4px;padding:1.1rem 1.4rem;position:relative;
+      box-shadow:4px 4px 0 var(--border);width:100%;
+      animation:bubble-in .3s var(--spring)}
+    @keyframes bubble-in{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+    .bubble::before{content:'';position:absolute;left:-10px;bottom:14px;
+      border:6px solid transparent;border-right-color:var(--border2)}
+    .bubble::after{content:'';position:absolute;left:-7px;bottom:15px;
+      border:5px solid transparent;border-right-color:var(--card)}
+    .bubble-text{font-family:var(--ff);font-size:1.15rem;font-weight:700;color:var(--txt);line-height:1.4}
+    .bubble-sub{font-family:var(--fm);font-size:.65rem;color:var(--txt3);margin-top:.35rem}
+
+    /* ANSWER BUTTONS */
+    .answers{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%}
+    .ans-btn{padding:.85rem 1rem;border-radius:10px;border:2px solid var(--border2);
+      background:var(--card);color:var(--txt);
+      font-family:var(--ff);font-size:.9rem;font-weight:700;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;gap:.5rem;
+      transition:all .18s var(--spring);box-shadow:3px 3px 0 var(--border)}
+    .ans-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--border2)}
+    .ans-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--border)}
+    .ans-btn.yes{border-color:var(--green)}
+    .ans-btn.yes:hover{background:rgba(6,214,160,.12);border-color:var(--green);color:var(--green)}
+    .ans-btn.no{border-color:var(--red)}
+    .ans-btn.no:hover{background:rgba(255,71,87,.12);border-color:var(--red);color:var(--red)}
+    .ans-btn.prob{border-color:var(--yellow)}
+    .ans-btn.prob:hover{background:rgba(255,230,109,.12);border-color:var(--yellow);color:var(--yellow)}
+    .ans-btn.dontknow{border-color:var(--txt3)}
+    .ans-btn.dontknow:hover{background:rgba(154,152,200,.08);color:var(--txt2)}
+    .ans-btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+
+    /* PROGRESS */
+    .progress-wrap{width:100%}
+    .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+    .prog-label{font-family:var(--fm);font-size:.6rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em}
+    .prog-val{font-family:var(--fm);font-size:.7rem;color:var(--pink);font-weight:700}
+    .progress-bar{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
+    .progress-fill{height:100%;border-radius:3px;
+      background:linear-gradient(90deg,var(--pink),var(--purple));
+      transition:width .5s var(--spring);box-shadow:0 0 8px rgba(255,107,157,.4)}
+
+    /* HISTORY */
+    .history{width:100%;background:var(--card);border:1px solid var(--border);
+      border-radius:10px;padding:.8rem 1rem;max-height:160px;overflow-y:auto}
+    .history::-webkit-scrollbar{width:3px}
+    .history::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+    .hist-label{font-family:var(--fm);font-size:.58rem;color:var(--txt3);
+      text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem}
+    .hist-item{display:flex;align-items:flex-start;gap:.5rem;padding:.25rem 0;
+      border-bottom:1px solid var(--border);font-family:var(--fm);font-size:.68rem;color:var(--txt2)}
+    .hist-item:last-child{border-bottom:none}
+    .hist-q{flex:1;line-height:1.4}
+    .hist-a{font-weight:700;flex-shrink:0;font-size:.62rem;padding:1px 6px;border-radius:4px}
+    .hist-a.yes{color:var(--green);background:rgba(6,214,160,.1)}
+    .hist-a.no{color:var(--red);background:rgba(255,71,87,.1)}
+    .hist-a.prob{color:var(--yellow);background:rgba(255,230,109,.1)}
+    .hist-a.dk{color:var(--txt3);background:var(--surface)}
+
+    /* RESULT CARD */
+    .result-card{width:100%;background:var(--card);border:2px solid var(--border2);
+      border-radius:16px;padding:2rem;text-align:center;
+      box-shadow:6px 6px 0 var(--border);animation:bubble-in .4s var(--spring)}
+    .result-emoji{font-size:3.5rem;margin-bottom:.8rem;display:block}
+    .result-title{font-family:var(--ff);font-size:1.5rem;font-weight:800;color:var(--txt);margin-bottom:.4rem}
+    .result-title.win{color:var(--green)}
+    .result-title.lose{color:var(--red)}
+    .result-guess{font-family:var(--fm);font-size:1rem;font-weight:700;
+      color:var(--pink);letter-spacing:.05em;margin:.6rem 0;
+      padding:.6rem 1.2rem;background:rgba(255,107,157,.08);
+      border:1px solid rgba(255,107,157,.2);border-radius:8px;display:inline-block}
+    .result-sub{font-family:var(--fm);font-size:.7rem;color:var(--txt3);margin-top:.5rem;line-height:1.6}
+    .result-stats{display:flex;justify-content:center;gap:1.5rem;margin:1rem 0}
+    .rstat{text-align:center}
+    .rstat-val{font-family:var(--ff);font-size:1.4rem;font-weight:800;color:var(--pink)}
+    .rstat-lbl{font-family:var(--fm);font-size:.58rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em}
+
+    /* THINKING */
+    .thinking-wrap{display:flex;align-items:center;gap:.6rem;
+      font-family:var(--fm);font-size:.72rem;color:var(--txt3);
+      padding:.6rem 1rem;background:var(--surface);border-radius:8px;border:1px solid var(--border)}
+    .thinking-dots span{display:inline-block;width:5px;height:5px;border-radius:50%;
+      background:var(--pink);margin:0 2px;animation:dot-bounce .8s ease-in-out infinite}
+    .thinking-dots span:nth-child(2){animation-delay:.15s}
+    .thinking-dots span:nth-child(3){animation-delay:.3s}
+    @keyframes dot-bounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+    /* ENTRY SCREEN */
+    #entry{position:fixed;inset:0;z-index:300;background:var(--bg);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:1.5rem;padding:2rem;text-align:center;
+      transition:opacity .5s ease,transform .5s ease}
+    #entry.hide{opacity:0;pointer-events:none;transform:scale(1.04)}
+    .entry-genie{font-size:4rem;animation:genie-float 3s ease-in-out infinite;
+      filter:drop-shadow(0 0 20px rgba(255,107,157,.4))}
+    .entry-title{font-family:var(--ff);font-size:clamp(2.5rem,9vw,4.5rem);font-weight:800;
+      text-transform:uppercase;letter-spacing:-.03em;line-height:.9}
+    .entry-title .stroke{-webkit-text-stroke:2px var(--pink);color:transparent}
+    .entry-sub{font-family:var(--fm);font-size:.75rem;color:var(--txt2);max-width:380px;line-height:1.7}
+
+    /* powered by badge */
+    .powered-badge{
+      display:flex;align-items:center;gap:.5rem;
+      font-family:var(--fm);font-size:.62rem;color:var(--txt3);
+      background:var(--surface);border:1px solid var(--border);
+      padding:.4rem .9rem;border-radius:20px;
+    }
+    .powered-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+      animation:blink 1.5s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    /* category */
+    .cat-wrap{width:100%;max-width:480px}
+    .cat-label{font-family:var(--fm);font-size:.6rem;color:var(--txt2);
+      text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;display:block}
+    .cat-chips{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center}
+    .cat-chip{padding:.3rem .75rem;border-radius:20px;
+      background:var(--card);border:1px solid var(--border2);
+      font-family:var(--fm);font-size:.62rem;color:var(--txt2);
+      cursor:pointer;transition:all .15s var(--spring);user-select:none}
+    .cat-chip:hover{border-color:var(--pink);color:var(--txt)}
+    .cat-chip.on{background:rgba(255,107,157,.1);border-color:var(--pink);color:var(--pink)}
+
+    /* start btn */
+    .start-btn{padding:1rem 3rem;border-radius:10px;border:3px solid var(--pink);
+      background:var(--pink);color:#0C0C18;
+      font-family:var(--ff);font-size:1.1rem;font-weight:800;cursor:pointer;
+      box-shadow:5px 5px 0 rgba(255,107,157,.3);transition:all .18s var(--spring);
+      display:flex;align-items:center;gap:.6rem}
+    .start-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(255,107,157,.3)}
+    .start-btn:active{transform:translate(2px,2px);box-shadow:none}
+
+    /* CTRL */
+    .ctrl-row{display:flex;gap:.5rem;width:100%}
+    .ctrl-btn{flex:1;padding:.65rem;border-radius:8px;border:1px solid var(--border2);
+      background:var(--surface);color:var(--txt2);
+      font-family:var(--fm);font-size:.65rem;font-weight:700;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;gap:.35rem;
+      transition:all .15s var(--spring);box-shadow:2px 2px 0 var(--border)}
+    .ctrl-btn:hover{border-color:var(--pink);color:var(--pink);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--border2)}
+
+    #game{display:none;width:100%}
+
+    /* GAME TOPBAR */
+    .game-topbar{display:flex;align-items:center;justify-content:space-between;
+      width:100%;background:var(--card);border:1px solid var(--border);
+      border-radius:10px;padding:.7rem 1rem}
+    .gtb-left{display:flex;align-items:center;gap:.8rem}
+    .gtb-stat{text-align:center}
+    .gtb-val{font-family:var(--ff);font-size:1.1rem;font-weight:800;color:var(--pink)}
+    .gtb-lbl{font-family:var(--fm);font-size:.55rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em}
+    .gtb-sep{width:1px;height:30px;background:var(--border)}
+    .gtb-category{font-family:var(--fm);font-size:.62rem;color:var(--cyan);
+      background:rgba(78,205,196,.08);border:1px solid rgba(78,205,196,.2);
+      padding:3px 10px;border-radius:20px}
+
+    /* FOOTER */
+    .footer-bar{position:relative;z-index:1;width:100%;max-width:680px;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.6rem 1.2rem;border-top:1px solid var(--border);flex-wrap:wrap;gap:.4rem;margin-top:auto}
+    .footer-credit{font-family:var(--fm);font-size:.6rem;color:var(--txt3)}
+    .footer-credit a{color:var(--pink);text-decoration:none;font-weight:600}
+    .footer-links{display:flex;gap:.4rem}
+    .footer-links a{width:26px;height:26px;border-radius:6px;background:var(--surface);
+      border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+      color:var(--txt3);font-size:.75rem;text-decoration:none;transition:all .12s var(--spring)}
+    .footer-links a:hover{background:var(--pink);color:#fff;border-color:var(--pink)}
+
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+    @media(max-width:480px){
+      .answers{grid-template-columns:1fr 1fr}
+      .ans-btn{font-size:.8rem;padding:.7rem .6rem}
+    }
+  </style>
+</head>
+<body>
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-logo">🧞</div>
+    <span class="nav-title">GENIE.exe</span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-badge">AI Mind Reader · ANURAG.exe</span>
+    <a class="nav-link" href="https://github.com/instai4" target="_blank"><i class="ri-github-fill"></i></a>
+    <a class="nav-link" href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="ri-global-line"></i></a>
+  </div>
+</nav>
+
+<!-- ENTRY SCREEN -->
+<div id="entry">
+  <div class="entry-genie">🧞</div>
+  <div class="entry-title">
+    THINK OF<br><span class="stroke">ANYTHING</span>
+  </div>
+  <p class="entry-sub">
+    I am the all-knowing Genie. Think of any person, character, or animal —
+    real or fictional. Answer my questions and I will read your mind in 20 questions or less.
+  </p>
+
+  <div class="powered-badge">
+    <div class="dot"></div>
+    Powered by Gemini AI · Free for everyone · No login needed
+  </div>
+
+  <div class="cat-wrap">
+    <span class="cat-label"><i class="ri-layout-grid-line"></i> &nbsp;What can I guess?</span>
+    <div class="cat-chips">
+      <div class="cat-chip on" data-c="real">🧑 Real People</div>
+      <div class="cat-chip on" data-c="fictional">🎭 Fictional Characters</div>
+      <div class="cat-chip on" data-c="anime">⛩️ Anime / Manga</div>
+      <div class="cat-chip on" data-c="games">🎮 Game Characters</div>
+      <div class="cat-chip on" data-c="animals">🦁 Animals</div>
+      <div class="cat-chip on" data-c="movies">🎬 Movie / TV</div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startGame()">
+    <i class="ri-mind-map"></i> Read My Mind
+  </button>
+</div>
+
+<!-- GAME -->
+<div class="wrapper">
+  <div id="game">
+
+    <div class="game-topbar">
+      <div class="gtb-left">
+        <div class="gtb-stat">
+          <div class="gtb-val" id="q-count">0</div>
+          <div class="gtb-lbl">Questions</div>
+        </div>
+        <div class="gtb-sep"></div>
+        <div class="gtb-stat">
+          <div class="gtb-val" id="conf-val">0%</div>
+          <div class="gtb-lbl">Confidence</div>
+        </div>
+      </div>
+      <div class="gtb-category" id="cat-display">All Categories</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span class="prog-label">Questions used</span>
+        <span class="prog-val" id="prog-text">0 / 20</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="genie-wrap">
+      <div class="genie-avatar" id="genie-face">🧞</div>
+      <span class="genie-name">>_ GENIE.exe is reading your mind...</span>
+    </div>
+
+    <div class="thinking-wrap" id="thinking" style="display:none">
+      <div class="thinking-dots"><span></span><span></span><span></span></div>
+      <span id="thinking-txt">Consulting the cosmic database...</span>
+    </div>
+
+    <div class="bubble" id="bubble" style="display:none">
+      <div class="bubble-text" id="bubble-text">...</div>
+      <div class="bubble-sub" id="bubble-sub"></div>
+    </div>
+
+    <div class="answers" id="answers" style="display:none">
+      <button class="ans-btn yes" onclick="answer('YES')">✅ Yes</button>
+      <button class="ans-btn no" onclick="answer('NO')">❌ No</button>
+      <button class="ans-btn prob" onclick="answer('PROBABLY')">🤔 Probably</button>
+      <button class="ans-btn dontknow" onclick="answer('DONT_KNOW')">🤷 Don't Know</button>
+    </div>
+
+    <div class="result-card" id="result-card" style="display:none">
+      <span class="result-emoji" id="res-emoji">🧞</span>
+      <div class="result-title" id="res-title">MY GUESS IS...</div>
+      <div class="result-guess" id="res-guess">...</div>
+      <div class="result-stats">
+        <div class="rstat">
+          <div class="rstat-val" id="res-q">0</div>
+          <div class="rstat-lbl">Questions</div>
+        </div>
+        <div class="rstat">
+          <div class="rstat-val" id="res-conf">0%</div>
+          <div class="rstat-lbl">Confidence</div>
+        </div>
+      </div>
+      <p class="result-sub" id="res-sub">Was I right?</p>
+      <div id="feedback-btns" style="display:flex;gap:.6rem;margin-top:1.2rem;justify-content:center;flex-wrap:wrap">
+        <button class="ans-btn yes" style="max-width:160px" onclick="onCorrect()">✅ Yes, correct!</button>
+        <button class="ans-btn no" style="max-width:160px" onclick="onWrong()">❌ No, wrong!</button>
+      </div>
+    </div>
+
+    <div class="history" id="history" style="display:none">
+      <div class="hist-label">>_ Question log</div>
+      <div id="hist-items"></div>
+    </div>
+
+    <div class="ctrl-row">
+      <button class="ctrl-btn" onclick="restartGame()"><i class="ri-refresh-line"></i> New Game</button>
+      <button class="ctrl-btn" onclick="goToEntry()"><i class="ri-settings-3-line"></i> Settings</button>
+      <button class="ctrl-btn" onclick="forceGuess()"><i class="ri-brain-line"></i> Make Guess</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer-bar">
+  <span class="footer-credit">
+    Built by <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank">ANURAG RAJPUT</a>
+    · Data Science Student @ DBUU
+  </span>
+  <div class="footer-links">
+    <a href="https://github.com/instai4" target="_blank"><i class="ri-github-fill"></i></a>
+    <a href="https://www.linkedin.com/in/anurag-singh-43230a380/" target="_blank"><i class="ri-linkedin-fill"></i></a>
+    <a href="https://instai4.github.io/PORT-FOLIO/" target="_blank"><i class="ri-global-line"></i></a>
+  </div>
+</div>
+
+<script>
+/* CURSOR */
+const cur = document.getElementById('cursor');
+document.addEventListener('mousemove', e => { cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
+document.querySelectorAll('a,button,.cat-chip').forEach(el => {
+  el.addEventListener('mouseenter',()=>{ cur.style.width='36px';cur.style.height='36px';cur.style.background='rgba(255,107,157,.15)'; });
+  el.addEventListener('mouseleave',()=>{ cur.style.width='14px';cur.style.height='14px';cur.style.background='rgba(255,107,157,.25)'; });
+});
+
+/* CATEGORY CHIPS */
+document.querySelectorAll('.cat-chip').forEach(c => {
+  c.addEventListener('click', () => c.classList.toggle('on'));
+});
+
+/* STATE */
+let gameHistory = [];
+let questionCount = 0;
+let confidence = 0;
+let currentGuess = '';
+let gameOver = false;
+let selectedCategories = [];
+const MAX_Q = 20;
+
+/* HELPERS */
+function setThinking(show, msg='Consulting the cosmic database...') {
+  document.getElementById('thinking-txt').textContent = msg;
+  document.getElementById('thinking').style.display = show ? 'flex' : 'none';
+  document.getElementById('answers').style.display = show ? 'none' : 'grid';
+  document.getElementById('bubble').style.display = show ? 'none' : 'block';
+  const face = document.getElementById('genie-face');
+  show ? face.classList.add('thinking') : face.classList.remove('thinking');
+  document.querySelectorAll('.ans-btn').forEach(b => b.disabled = show);
+}
+
+function updateProgress() {
+  const pct = Math.min((questionCount / MAX_Q) * 100, 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = questionCount + ' / ' + MAX_Q;
+  document.getElementById('q-count').textContent = questionCount;
+  document.getElementById('conf-val').textContent = Math.round(confidence) + '%';
+}
+
+function addToHistory(q, a) {
+  gameHistory.push({ q, a });
+  const cls = a==='YES'?'yes':a==='NO'?'no':a==='PROBABLY'?'prob':'dk';
+  const label = a==='YES'?'Yes':a==='NO'?'No':a==='PROBABLY'?'Prob.':'?';
+  const container = document.getElementById('hist-items');
+  const item = document.createElement('div');
+  item.className = 'hist-item';
+  item.innerHTML = `<span class="hist-q">${gameHistory.length}. ${q}</span><span class="hist-a ${cls}">${label}</span>`;
+  container.appendChild(item);
+  container.scrollTop = container.scrollHeight;
+  document.getElementById('history').style.display = 'block';
+}
+
+/* BUILD PROMPT */
+function buildSystemPrompt() {
+  const cats = selectedCategories.join(', ');
+  return `You are GENIE, an all-knowing AI playing the Akinator game. The user is thinking of something from these categories: ${cats}.
+
+Your job: Ask ONE yes/no question at a time to narrow down what the user is thinking of.
+
+RULES:
+1. Ask only ONE question per response.
+2. Questions must be answerable with Yes, No, Probably, or Don't Know.
+3. Start broad then get progressively more specific.
+4. After 6+ answers, start making educated guesses.
+5. When confidence > 80%, make your guess using isGuess:true.
+6. If your guess is wrong, ask more questions.
+7. Never repeat a previous question.
+8. Keep questions short and clear.
+
+Respond ONLY in this exact JSON format (no markdown, no extra text):
+{"question":"Your question here","confidence":45,"isGuess":false,"guess":""}
+
+When guessing:
+{"question":"Is it [NAME]?","confidence":88,"isGuess":true,"guess":"[NAME]"}`;
+}
+
+function buildMessages() {
+  const msgs = [];
+  for (let i = 0; i < gameHistory.length; i++) {
+    msgs.push({ role:'model', parts:[{ text: JSON.stringify({ question:gameHistory[i].q, confidence:Math.round(confidence), isGuess:false, guess:'' }) }] });
+    msgs.push({ role:'user',  parts:[{ text: gameHistory[i].a }] });
+  }
+  if (msgs.length === 0) {
+    msgs.push({ role:'user', parts:[{ text:'Start the game. Ask your first question.' }] });
+  } else {
+    msgs.push({ role:'user', parts:[{ text:'Continue asking or make a guess if confident enough.' }] });
+  }
+  return msgs;
+}
+
+/* CALL BACKEND PROXY */
+async function callGemini(overrideBody = null) {
+  const body = overrideBody || {
+    systemPrompt: buildSystemPrompt(),
+    messages: buildMessages(),
+    forceGuess: false
+  };
+  const res = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Server error');
+  }
+  return res.json();
+}
+
+/* START */
+function startGame() {
+  selectedCategories = [...document.querySelectorAll('.cat-chip.on')].map(c => c.dataset.c);
+  if (!selectedCategories.length) { alert('Please select at least one category!'); return; }
+
+  document.getElementById('entry').classList.add('hide');
+  setTimeout(() => document.getElementById('entry').style.display='none', 500);
+  document.getElementById('game').style.display = 'block';
+  document.getElementById('cat-display').textContent = selectedCategories.length === 6 ? 'All Categories' : selectedCategories.join(', ');
+
+  gameHistory = []; questionCount = 0; confidence = 0; currentGuess = ''; gameOver = false;
+  document.getElementById('hist-items').innerHTML = '';
+  document.getElementById('history').style.display = 'none';
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('genie-face').className = 'genie-avatar';
+  updateProgress();
+  askNext();
+}
+
+/* ASK NEXT */
+async function askNext() {
+  if (gameOver) return;
+  if (questionCount >= MAX_Q) { forceGuess(); return; }
+
+  setThinking(true, questionCount < 5 ? 'Reading the cosmic waves...' : questionCount < 12 ? 'Narrowing it down...' : 'Almost there...');
+
+  try {
+    const resp = await callGemini();
+    confidence = resp.confidence || confidence;
+    updateProgress();
+    setThinking(false);
+
+    if (resp.isGuess && resp.guess) {
+      currentGuess = resp.guess;
+      document.getElementById('bubble-text').textContent = resp.question || `Is it ${resp.guess}?`;
+      document.getElementById('bubble-sub').textContent = `🔮 My confidence: ${Math.round(resp.confidence)}%`;
+    } else {
+      currentGuess = '';
+      document.getElementById('bubble-text').textContent = resp.question;
+      document.getElementById('bubble-sub').textContent = questionCount < 5
+        ? '💭 Think carefully and answer honestly...'
+        : questionCount < 12
+        ? `🔮 Confidence: ${Math.round(resp.confidence)}% — getting warmer`
+        : `🔥 Very close! Confidence: ${Math.round(resp.confidence)}%`;
+    }
+    document.getElementById('bubble').style.display = 'block';
+    document.getElementById('answers').style.display = 'grid';
+    questionCount++;
+    updateProgress();
+
+  } catch(err) {
+    setThinking(false);
+    document.getElementById('bubble-text').textContent = '⚠️ ' + err.message;
+    document.getElementById('bubble-sub').textContent = 'Check your connection or try again.';
+    document.getElementById('bubble').style.display = 'block';
+    document.getElementById('answers').style.display = 'none';
+  }
+}
+
+/* ANSWER */
+function answer(ans) {
+  const currentQ = document.getElementById('bubble-text').textContent;
+  if (currentGuess) {
+    addToHistory(currentQ, ans);
+    if (ans === 'YES') { showResult(true, currentGuess); return; }
+    currentGuess = '';
+    askNext();
+    return;
+  }
+  addToHistory(currentQ, ans);
+  askNext();
+}
+
+/* FORCE GUESS */
+async function forceGuess() {
+  if (gameOver) return;
+  setThinking(true, 'Summoning my final answer...');
+  try {
+    const historyText = gameHistory.map((h,i) => `Q${i+1}: ${h.q} → ${h.a}`).join('\n');
+    const forcePrompt = `You are playing Akinator. Based on this Q&A history, make your best single guess.
+Categories: ${selectedCategories.join(', ')}
+
+History:
+${historyText}
+
+Respond ONLY in JSON (no markdown):
+{"guess":"Character/Person Name","confidence":75,"reasoning":"brief reason"}`;
+
+    const resp = await callGemini({
+      systemPrompt: forcePrompt,
+      messages: [{ role:'user', parts:[{ text:'Make your best guess now.' }] }],
+      forceGuess: true
+    });
+    confidence = resp.confidence || confidence;
+    setThinking(false);
+    showResult(null, resp.guess, resp.reasoning);
+  } catch(err) {
+    setThinking(false);
+    showResult(null, 'Unknown', 'Could not determine from the given answers.');
+  }
+}
+
+/* SHOW RESULT */
+function showResult(correct, guess, reasoning='') {
+  gameOver = true;
+  document.getElementById('bubble').style.display = 'none';
+  document.getElementById('answers').style.display = 'none';
+  document.getElementById('result-card').style.display = 'block';
+
+  document.getElementById('res-guess').textContent = guess || '???';
+  document.getElementById('res-q').textContent = questionCount;
+  document.getElementById('res-conf').textContent = Math.round(confidence) + '%';
+
+  if (correct === true) {
+    document.getElementById('res-emoji').textContent = '🎉';
+    document.getElementById('res-title').textContent = 'I GOT IT!';
+    document.getElementById('res-title').className = 'result-title win';
+    document.getElementById('res-sub').textContent = `✨ I read your mind in just ${questionCount} questions!`;
+    document.getElementById('feedback-btns').style.display = 'none';
+    document.getElementById('genie-face').classList.add('win');
+  } else {
+    document.getElementById('res-emoji').textContent = '🔮';
+    document.getElementById('res-title').textContent = 'MY GUESS IS...';
+    document.getElementById('res-title').className = 'result-title';
+    document.getElementById('res-sub').textContent = reasoning || `After ${questionCount} questions, this is my best guess.`;
+    document.getElementById('feedback-btns').style.display = 'flex';
+  }
+  updateProgress();
+}
+
+function onCorrect() {
+  document.getElementById('genie-face').className = 'genie-avatar win';
+  document.getElementById('res-emoji').textContent = '🎉';
+  document.getElementById('res-title').textContent = 'I GOT IT!';
+  document.getElementById('res-title').className = 'result-title win';
+  document.getElementById('res-sub').textContent = `✨ The genie never fails! ${questionCount} questions.`;
+  document.getElementById('feedback-btns').style.display = 'none';
+}
+function onWrong() {
+  document.getElementById('genie-face').className = 'genie-avatar lose';
+  document.getElementById('res-emoji').textContent = '😔';
+  document.getElementById('res-title').textContent = 'I WAS WRONG...';
+  document.getElementById('res-title').className = 'result-title lose';
+  document.getElementById('res-sub').textContent = 'You outsmarted me! Play again and I will learn.';
+  document.getElementById('feedback-btns').style.display = 'none';
+}
+
+function restartGame() {
+  gameHistory=[]; questionCount=0; confidence=0; currentGuess=''; gameOver=false;
+  document.getElementById('hist-items').innerHTML='';
+  document.getElementById('history').style.display='none';
+  document.getElementById('result-card').style.display='none';
+  document.getElementById('bubble').style.display='none';
+  document.getElementById('answers').style.display='none';
+  document.getElementById('thinking').style.display='none';
+  document.getElementById('genie-face').className='genie-avatar';
+  document.getElementById('feedback-btns').style.display='flex';
+  updateProgress();
+  askNext();
+}
+
+function goToEntry() {
+  document.getElementById('game').style.display='none';
+  const entry=document.getElementById('entry');
+  entry.style.display='flex';
+  setTimeout(()=>entry.classList.remove('hide'),10);
+}
+</script>
+</body>
+</html>
