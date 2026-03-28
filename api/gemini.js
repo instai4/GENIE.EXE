@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   try {
     const { systemPrompt, messages, forceGuess } = req.body;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${apiKey}`;
 
     const body = {
       system_instruction: { parts: [{ text: systemPrompt }] },
